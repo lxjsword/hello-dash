@@ -24,6 +24,7 @@ class HelloView(MethodView):
     def post(self):
         log_error(threading.get_ident())
         log_error(current_user.user_name)
+        log_error(request.headers)
         # 处理POST请求的逻辑
         if not current_user.is_authenticated:
             return redirect('/login')
