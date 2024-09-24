@@ -12,27 +12,27 @@ import feffery_antd_components as fac # fac通用组件库
 
 
 MENU_CFG = [
-    {'icon': 'antd-home', 'key': 'home', 'title': '主页', 'href': '/'},
+    {'icon': 'antd-home', 'key': 'home', 'title': '主页', 'href': '/wspace/'},
     {
         'icon': 'antd-tool-two-tone', 'key': 'tools', 'title': '工具',
         'children': [
-            {'key': 'json_tool', 'title': 'Json工具', 'href': '/tools/json_tool'},
-            {'key': 'md_tool', 'title': 'Markdown工具', 'href': '/tools/md_tool'},
+            {'key': 'json_tool', 'title': 'Json工具', 'href': '/wspace/tools/json_tool'},
+            {'key': 'md_tool', 'title': 'Markdown工具', 'href': '/wspace/tools/md_tool'},
         ],
     },
     {
         'icon': 'antd-question', 'key': 'fmenu', 'title': '父菜单',
         'children': [
-            {'key': 'cmenu1', 'title': '子菜单1', 'href': '/fmenu/cmenu1'},
-            {'key': 'cmenu2', 'title': '子菜单2', 'href': '/fmenu/cmenu2'},
+            {'key': 'cmenu1', 'title': '子菜单1', 'href': '/wspace/fmenu/cmenu1'},
+            {'key': 'cmenu2', 'title': '子菜单2', 'href': '/wspace/fmenu/cmenu2'},
             {'key': 'cmenu3', 'title': '子菜单3', 
                 'children': [
-                    {'key': 'cmenu3-1', 'title': '子菜单3-1', 'href': '/fmenu/cmenu3/cmenu3-1'},
+                    {'key': 'cmenu3-1', 'title': '子菜单3-1', 'href': '/wspace/fmenu/cmenu3/cmenu3-1'},
                 ]
             },
         ],
     },
-    {'icon': 'antd-info-circle', 'key': 'system_info', 'title': '系统信息', 'href': '/system_info'},
+    {'icon': 'antd-info-circle', 'key': 'system_info', 'title': '系统信息', 'href': '/wspace/system_info'},
 ]
 
 

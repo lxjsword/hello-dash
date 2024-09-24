@@ -85,22 +85,22 @@ def main_layout():
     Input('dcc-url', 'pathname')
 )
 def route(pathname):
-    if pathname not in ('/login', ):
+    if pathname not in ('/wspace/login', ):
         if not current_user.is_authenticated:
             render_func = getattr(login, "render")
         else:
-            if pathname == '/':
+            if pathname == '/wspace/':
                 render_func = getattr(home, "render")
-            elif pathname == '/system_info':
+            elif pathname == '/wspace/system_info':
                 render_func = getattr(system_info, "render")
-            elif pathname == '/tools/json_tool':
+            elif pathname == '/wspace/tools/json_tool':
                 render_func = getattr(json_tool, "render")
-            elif pathname == '/tools/md_tool':
+            elif pathname == '/wspace/tools/md_tool':
                 render_func = getattr(md_tool, "render")
             else:
                 render_func = getattr(page_404, "render")
     else:
-        if pathname == '/login':
+        if pathname == '/wspace/login':
             render_func = getattr(login, "render")
 
     return render_func()
@@ -140,4 +140,4 @@ def menu_advanced_callback(currentItem, currentKeyPath, currentItemPath):
 )
 def menu_advanced_callback(n_clicks):
     logout_user()
-    return "/login"
+    return "/wspace/login"

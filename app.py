@@ -25,7 +25,9 @@ from commands import my_command_group
 
 
 server = Flask(__name__)
-app = dash.Dash(__name__, server=server, suppress_callback_exceptions=True)
+app = dash.Dash(__name__, server=server,
+    routes_pathname_prefix=APP_CFG['APPLICATION_ROOT'],
+    suppress_callback_exceptions=True)
 
 
 def init_server():
@@ -80,7 +82,7 @@ def teardown_request(exception):
 
 
 def register_api_views():
-    server.add_url_rule('/api/hello', view_func=HelloView.as_view('helloview'))
+    server.add_url_rule('/wspace/api/hello', view_func=HelloView.as_view('helloview'))
 
 
 def register_commands():

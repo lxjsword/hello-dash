@@ -17,6 +17,7 @@ SECRET_KEY= os.getenv('SECRET_KEY', '')
 APP_CFG = {
     'HOST': '0.0.0.0',
     'PORT': 8051 if ENV == 'dev' else 8050,
+    'APPLICATION_ROOT': '/wspace/',
     'SECRET_KEY': SECRET_KEY,
     'SQLALCHEMY_DATABASE_URI': 'sqlite:////' + os.path.join(
         APP_BASE, 'testdata.db' if ENV == 'dev' else 'data.db'),
