@@ -36,6 +36,6 @@ def login(n_clicks, username, password):
     user_data = User.query.filter_by(user_name=username).first()
     if user_data and user_data.validate_password(password):
         login_user(user_data)
-        return "/"
+        return "/wspace/"
     else:
         return no_update

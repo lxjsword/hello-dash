@@ -22,5 +22,5 @@ APP_CFG = {
     'SQLALCHEMY_DATABASE_URI': 'sqlite:////' + os.path.join(
         APP_BASE, 'testdata.db' if ENV == 'dev' else 'data.db'),
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
-    'REMEMBER_COOKIE_DURATION': timedelta(days=1)
+    'PERMANENT_SESSION_LIFETIME': timedelta(days=1),
 }

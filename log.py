@@ -39,8 +39,8 @@ class MyLoggerAdapter(logging.LoggerAdapter):
             kwargs["extra"] = self.gen_extra()
         try:
             str_msg = "%s" % msg
-            if str_msg > MM_LOG_MAX_LENGTH:
-                msg = str_msg[:MM_LOG_MAX_LENGTH]
+            if str_msg > self.MM_LOG_MAX_LENGTH:
+                msg = str_msg[:self.MM_LOG_MAX_LENGTH]
         except:
             pass
 

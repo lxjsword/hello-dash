@@ -15,6 +15,7 @@ import json
 from flask_login import current_user, logout_user
 
 from layout.sider import sider
+from layout.header import header
 from pages import (home, system_info, page_404, login, )
 from pages.tools import (json_tool, md_tool, )
 
@@ -24,41 +25,7 @@ def main_layout():
         [
             # 用于回调pathname信息
             dcc.Location(id='dcc-url', refresh=False),
-            fac.AntdHeader(
-                [
-                    fac.AntdCol(
-                        html.Div(
-                            fac.AntdTitle(
-                                'WSpace工作台', level=2
-                            ),
-                            style={
-                                'height': '100%',
-                                'display': 'flex',
-                                'alignItems': 'center'
-                            }
-                        ),
-                    ),
-                    fac.AntdCol(
-                        fac.AntdBreadcrumb(
-                            id='header-breadcrumb',
-                            items=[],
-                        ),
-                        style={
-                            'height': '100%',
-                            'display': 'flex',
-                            'alignItems': 'flex-end',
-                            'marginLeft': '20px',
-                        },
-                    ),
-                    fac.AntdButton("登出", type="primary", id="logout"), 
-                ],
-                style={
-                    'display': 'flex',
-                    'justifyContent': 'left',
-                    'alignItems': 'center',
-                    'backgroundColor': '#ebf3ff',
-                },
-            ),
+            header(),
             fac.AntdLayout(
                 [
                     sider(),
@@ -81,14 +48,17 @@ def main_layout():
 
 
 @callback(
+    Output('user_name', 'children'),
     Output('app-mount', 'children'),
     Input('dcc-url', 'pathname')
 )
 def route(pathname):
+    user_name = ''
     if pathname not in ('/wspace/login', ):
         if not current_user.is_authenticated:
             render_func = getattr(login, "render")
         else:
+            user_name = current_user.user_name
             if pathname == '/wspace/':
                 render_func = getattr(home, "render")
             elif pathname == '/wspace/system_info':
@@ -103,7 +73,7 @@ def route(pathname):
         if pathname == '/wspace/login':
             render_func = getattr(login, "render")
 
-    return render_func()
+    return user_name, render_func()
 
 
 @callback(
