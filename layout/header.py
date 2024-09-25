@@ -13,9 +13,9 @@ import feffery_antd_components as fac # fac通用组件库
 
 
 def header():
-    return html.Div(
+    return fac.AntdFlex(
         [
-            html.Div(
+            fac.AntdFlex(
                 [
                     fac.AntdTitle(
                         'WSpace工作台', level=2
@@ -31,26 +31,23 @@ def header():
                     
                 ],
                 style={
-                    'display': 'flex',
                     'justifyContent': 'flex-start',
                     'alignItems': 'flex-end',
                 },
             ), 
-            html.Div(
+            fac.AntdFlex(
                 [
                     fac.AntdText("", id='user_name', 
                                  strong=True, style={'marginRight': '20px'}),
                     fac.AntdButton("登出", type="primary", id="logout")
                 ],
                 style={
-                    'display': 'flex',
                     'justifyContent': 'flex-end',
                     'alignItems': 'center',
                 },
             )
         ], 
         style={
-            'display': 'flex',
             'justifyContent': 'space-between',
             'alignItems': 'center',
             'width': '100%', 
@@ -58,4 +55,50 @@ def header():
             'padding': '0px 20px'
         },
     )
+
+    # return html.Div(
+    #     [
+    #         html.Div(
+    #             [
+    #                 fac.AntdTitle(
+    #                     'WSpace工作台', level=2
+    #                 ), 
+    #                 fac.AntdBreadcrumb(
+    #                     id='header-breadcrumb',
+    #                     items=[],
+    #                     style={
+    #                         'marginLeft': '20px', 
+    #                         'marginBottom': '10px'
+    #                     }
+    #                 )
+                    
+    #             ],
+    #             style={
+    #                 'display': 'flex',
+    #                 'justifyContent': 'flex-start',
+    #                 'alignItems': 'flex-end',
+    #             },
+    #         ), 
+    #         html.Div(
+    #             [
+    #                 fac.AntdText("", id='user_name', 
+    #                              strong=True, style={'marginRight': '20px'}),
+    #                 fac.AntdButton("登出", type="primary", id="logout")
+    #             ],
+    #             style={
+    #                 'display': 'flex',
+    #                 'justifyContent': 'flex-end',
+    #                 'alignItems': 'center',
+    #             },
+    #         )
+    #     ], 
+    #     style={
+    #         'display': 'flex',
+    #         'justifyContent': 'space-between',
+    #         'alignItems': 'center',
+    #         'width': '100%', 
+    #         'backgroundColor': '#ebf3ff',
+    #         'padding': '0px 20px'
+    #     },
+    # )
     
