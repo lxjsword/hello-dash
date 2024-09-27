@@ -1,5 +1,9 @@
 # 使用说明
 
+## 配置.env文件
+SECRET_KEY=xxxxxx
+DASH_ENV=dev
+
 ## 启动
 ### 测试环境
 python app.py
