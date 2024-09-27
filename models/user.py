@@ -48,4 +48,9 @@ def load_user(user_id):
 
 
 def get_user(user_name):
-    return f"Hi {user_name}"
+    with db:
+        user = User.get_or_none(User.user_name == user_name)
+    if user:
+        return f"Hi {user.user_name}"
+    else:
+        return f"Hi none"

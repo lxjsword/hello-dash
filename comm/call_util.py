@@ -64,7 +64,7 @@ if __name__ == "__main__":
     log_error(user)
 
     import time
-    time.sleep(20)
+    time.sleep(10)
 
-    user = module.call_func('get_user', 'ryanxjli')
+    user = module.call_func('get_user', 'admin')
     log_error(user)
