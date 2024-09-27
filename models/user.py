@@ -25,8 +25,15 @@ class User(peewee.Model, UserMixin):
     id = peewee.BigIntegerField(primary_key=True)
     user_name = peewee.CharField(max_length=20, unique=True)
     passwd = peewee.CharField()
+    creator = peewee.CharField(max_length=20, default='admin')
     create_time = peewee.DateTimeField(default=datetime.datetime.now)
+    last_modifier = peewee.CharField(max_length=20, default='admin')
     last_modify_time = peewee.DateTimeField(default=datetime.datetime.now)
+
+    @classmethod
+    def update(cls, *args, **kwargs):
+        kwargs['last_modify_time'] = datetime.datetime.now()
+        return super(User, cls).update(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         self.last_modify_time = datetime.datetime.now()

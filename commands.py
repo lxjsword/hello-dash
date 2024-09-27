@@ -52,6 +52,7 @@ def create_user(user_name, passwd):
 
     click.echo('Add new user success.')  # 输出提示信息
 
+
 @my_command_group.command('reset_passwd')  # 注册为命令，可以传入 name 参数来自定义命令
 @click.option('--user_name', prompt='User Name', help='用户名')  # 设置选项
 @click.option('--passwd', hide_input=True, 
@@ -67,9 +68,9 @@ def reset_passwd(user_name, passwd):
         user.set_password(passwd)
         user.save()
 
-    # query = User.update(passwd=user.passwd).where(User.id == user.id)
-    # log_info(query.sql())
-    # n = query.execute()
-    # log_info(f"affect rows: {n}")
+        # query = User.update(passwd=passwd).where(User.user_name == user_name)
+        # log_info(query.sql())
+        # n = query.execute()
+        # log_info(f"affect rows: {n}")
 
     click.echo('Reset user password success.')  # 输出提示信息
