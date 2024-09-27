@@ -19,8 +19,7 @@ APP_CFG = {
     'PORT': 8051 if ENV == 'dev' else 8050,
     'APPLICATION_ROOT': '/wspace/',
     'SECRET_KEY': SECRET_KEY,
-    'SQLALCHEMY_DATABASE_URI': 'sqlite:////' + os.path.join(
+    'DATABASE_URI': os.path.join(
         APP_BASE, 'testdata.db' if ENV == 'dev' else 'data.db'),
-    'SQLALCHEMY_TRACK_MODIFICATIONS': False,
     'PERMANENT_SESSION_LIFETIME': timedelta(days=1),
 }

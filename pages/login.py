@@ -12,6 +12,7 @@ from dash import html, callback, Input, Output, State, no_update, dcc # dash自�
 import feffery_antd_components as fac # fac通用组件库
 from flask_login import UserMixin, login_user
 
+from db import db
 from models.user import User
 
 
@@ -33,9 +34,10 @@ def render():
     prevent_initial_call=True
 )
 def login(n_clicks, username, password):
-    user_data = User.query.filter_by(user_name=username).first()
-    if user_data and user_data.validate_password(password):
-        login_user(user_data)
-        return "/wspace/"
-    else:
-        return no_update
+    with db:
+        user_data = User.get_or_none(user_name=username)
+        if user_data and user_data.validate_password(password):
+            login_user(user_data)
+            return "/wspace/"
+        else:
+            return no_update

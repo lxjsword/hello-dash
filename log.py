@@ -1,7 +1,6 @@
 from logging.config import dictConfig
 import os
 import logging
-from flask_login import current_user
 
 from cfg import APP_BASE, request_id_context
 

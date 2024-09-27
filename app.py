@@ -31,11 +31,11 @@ app = dash.Dash(__name__, server=server,
 
 
 def init_server():
+    # 初始化日志格式
     init_log()
-    
     # 初始化flask server
     server.config.update(APP_CFG)
-    db.init_app(server)
+
     # 设置登录管理器
     login_manager = LoginManager()
     login_manager.init_app(server)
