@@ -62,10 +62,10 @@ def render():
                     },
                     {
                         'title': '操作',
-                        'dataIndex': 'id_btn',
+                        'dataIndex': 'edit_btn',
                         'renderOptions': {'renderType': 'button'},
                         'width': '5%',
-                    },
+                    }
                 ],
                 bordered=True,
                 # 关键参数
@@ -114,11 +114,18 @@ def blog_pagination(n_clicks, pagination, blog_title):
                 "creator": item.creator,
                 "create_time": item.create_time.strftime('%Y-%m-%d %H:%M:%S'),
                 "last_modify_time": item.last_modify_time.strftime('%Y-%m-%d %H:%M:%S'),
-                "id_btn": {
-                    'content': '编辑',
-                    'type': 'link',
-                    'custom': item.id,
-                },
+                "edit_btn": [
+                    {
+                        'content': '编辑',
+                        'type': 'link',
+                        'custom': item.id,
+                    },
+                    {
+                        'content': '查看',
+                        'type': 'link',
+                        'custom': item.id,
+                    },
+                ],
             })
         # log_info(res)
     time.sleep(0.5)  # 渲染加载动画更好看 ^_^
@@ -130,11 +137,15 @@ def blog_pagination(n_clicks, pagination, blog_title):
     Output('dcc-url', 'pathname', allow_duplicate=True),
     Output('dcc-url', 'search', allow_duplicate=True),
     Input('blog_list', 'nClicksButton'),
+    State('blog_list', 'clickedContent'),
     State('blog_list', 'clickedCustom'),
     prevent_initial_call=True,
 )
-def blog_search(nClicksButton, clickedCustom,):
-    return '/wspace/blog/edit_page', '?id={}'.format(clickedCustom)
+def blog_search(nClicksButton, clickedContent, clickedCustom,):
+    if clickedContent == '编辑':
+        return '/wspace/blog/edit_page', '?id={}'.format(clickedCustom)
+    else:
+        return '/wspace/blog/edit_page', '?id={}&preview=1'.format(clickedCustom)
 
 
 @callback(

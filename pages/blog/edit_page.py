@@ -18,10 +18,17 @@ def render(params):
     
     title, sel_tags, blog_content = '', [], ''
     blog_id = 0
+    # 'edit&preview', 'editOnly', 'previewOnly'
+    md_mode = 'edit&preview'
+    disabled = False
     if isinstance(params, dict) and params.get('id'):
         # 编辑
         blog_id = int(params.get('id', '0'))
-        
+        preview = params.get('preview', '0')
+        if preview == '1':
+            md_mode = 'previewOnly'
+            disabled = True
+
         with db:
             blog_data = Blog.get_or_none(Blog.id == blog_id)
         if not blog_data:
@@ -38,16 +45,16 @@ def render(params):
         [
             fac.Fragment(id='blog_msg'),
             fac.AntdText(id='blog_id', children=blog_id, style={'display': 'none'}),
-            fac.AntdButton("保存", type="primary", id="blog_save", style={'float': 'right'}),
+            fac.AntdButton("保存", type="primary", id="blog_save", disabled=disabled, style={'float': 'right'}),
             html.Div([
                 fac.AntdText("标 题: ", strong=True, style={'marginRight': 20}),
-                fac.AntdInput(id='blog_title', style={'flex': 1}, value=title)
+                fac.AntdInput(id='blog_title', style={'flex': 1}, value=title, disabled=disabled)
             ], style={'display': 'flex', 'flex-direction': 'row', 'alignItems': 'center',}
             ),
             html.Div([
                 fac.AntdText("分 类:", strong=True, style={'marginRight': 20}),
                 fac.AntdSelect(id='blog_tags', options=tags,
-                              readOnly=False, value=sel_tags,
+                              disabled=disabled, value=sel_tags,
                               mode='tags', style={'flex': 1})
             ], style={'display': 'flex', 'flex-direction': 'row', 'alignItems': 'center',}
             ),
@@ -55,8 +62,8 @@ def render(params):
                 id="blog_md",
                 value=blog_content,
                 editor={
-                    'defaultModel': 'edit&preview',
-                    'height': '600px',
+                    'defaultModel': md_mode, 
+                    # 'height': '600px',
                 }
             ),
         ],
