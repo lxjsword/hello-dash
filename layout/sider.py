@@ -21,6 +21,12 @@ MENU_CFG = [
         ],
     },
     {
+        'icon': 'antd-tool-two-tone', 'key': 'blog', 'title': '博客',
+        'children': [
+            {'key': 'json_tool', 'title': '博客列表', 'href': '/wspace/blog/list_page'}
+        ],
+    },
+    {
         'icon': 'antd-question', 'key': 'fmenu', 'title': '父菜单',
         'children': [
             {'key': 'cmenu1', 'title': '子菜单1', 'href': '/wspace/fmenu/cmenu1'},

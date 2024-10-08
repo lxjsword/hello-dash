@@ -7,6 +7,7 @@
 @Version :   1.0
 @Desc    :   None
 """
+import traceback
 import dash # dash应用核心
 from dash import (html, dcc, callback, Input, Output, State) # dash自带的原生html组件库
 import feffery_antd_components as fac # fac通用组件库
@@ -18,6 +19,7 @@ from layout.sider import sider
 from layout.header import header
 from pages import (home, system_info, page_404, login, )
 from pages.tools import (json_tool, md_tool, )
+from pages.blog import (edit_page, list_page, )
 
 
 def main_layout():
@@ -47,13 +49,37 @@ def main_layout():
     )
 
 
+def parse_search_params(search):
+    """
+    ?a=test&b=xxx
+    """
+    log_info(search)
+    if not search:
+        return ''
+    try:
+        params_url = search[1:]
+        params_pair = params_url.split('&')
+        params = {}
+        for item in params_pair:
+            k, v = item.split('=')
+            if v == 'None':
+                continue
+            params[k] = v
+        return params
+    except:
+        log_error(traceback.format_exc())
+        return ''
+
+
 @callback(
     Output('user_name', 'children'),
     Output('app-mount', 'children'),
-    Input('dcc-url', 'pathname')
+    Input('dcc-url', 'pathname'),
+    Input('dcc-url', 'search')
 )
-def route(pathname):
+def route(pathname, search):
     user_name = ''
+    params = None
     if pathname not in ('/wspace/login', ):
         if not current_user.is_authenticated:
             render_func = getattr(login, "render")
@@ -67,13 +93,21 @@ def route(pathname):
                 render_func = getattr(json_tool, "render")
             elif pathname == '/wspace/tools/md_tool':
                 render_func = getattr(md_tool, "render")
+            elif pathname == '/wspace/blog/edit_page':
+                render_func = getattr(edit_page, "render")
+                params = parse_search_params(search)
+            elif pathname == '/wspace/blog/list_page':
+                render_func = getattr(list_page, "render")
             else:
                 render_func = getattr(page_404, "render")
     else:
         if pathname == '/wspace/login':
             render_func = getattr(login, "render")
 
-    return user_name, render_func()
+    if params is not None:
+        return user_name, render_func(params)
+    else:
+        return user_name, render_func()
 
 
 @callback(

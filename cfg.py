@@ -22,4 +22,5 @@ APP_CFG = {
     'DATABASE_URI': os.path.join(
         APP_BASE, 'testdata.db' if ENV == 'dev' else 'data.db'),
     'PERMANENT_SESSION_LIFETIME': timedelta(days=1),
+    'DATA_PATH': os.path.join(APP_BASE, 'testdata' if ENV == 'dev' else 'data'),
 }

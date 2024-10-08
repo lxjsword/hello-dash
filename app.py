@@ -27,7 +27,8 @@ from commands import my_command_group
 server = Flask(__name__)
 app = dash.Dash(__name__, server=server,
     routes_pathname_prefix=APP_CFG['APPLICATION_ROOT'],
-    suppress_callback_exceptions=True)
+    suppress_callback_exceptions=True, 
+    assets_folder='static')
 
 
 def init_server():

@@ -54,7 +54,7 @@ def render():
 )
 def login(n_clicks, username, password):
     log_info(username)
-    log_error(password)
+    # log_error(password)
     with db:
         user_data = User.get_or_none(user_name=username)
         if user_data and user_data.validate_password(password):
