@@ -15,7 +15,7 @@ from flask import Flask, request
 from flask_login import LoginManager, current_user
 import uuid
 
-from cfg import APP_CFG, request_id_context
+from cfg import APP_CFG, request_id_context, cache
 from layout.main_layout import main_layout
 from log import init_log, log_info, log_error
 from db import db
@@ -41,6 +41,9 @@ def init_server():
     login_manager = LoginManager()
     login_manager.init_app(server)
     login_manager.user_loader(load_user)
+
+    # cache初始化
+    cache.init_app(server)
 
     # 初始化dash app
     app.layout = main_layout()

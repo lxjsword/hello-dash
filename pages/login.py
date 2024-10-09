@@ -41,6 +41,7 @@ def render():
         style={
             'backgroundColor': 'rgba(241, 241, 241, 0.6)',
             'padding': '20px',
+            'justifyContent': 'center',
         },
     )
 

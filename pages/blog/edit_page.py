@@ -8,13 +8,29 @@ from flask_login import current_user
 
 from models.blog import Blog, BlogTag
 from db import db
-from cfg import APP_CFG
+from cfg import APP_CFG, cache
 from log import log_info, log_error
 
 
-def render(params):
+def get_user_tags():
+    cache_key = "{}_tags".format(current_user.user_name)
+    
+    tags = cache.get(cache_key)
+    if tags:
+        log_info(f"get tags from cache, key: {cache_key}")
+        return tags
+    log_error(f"get tags from db, key: {cache_key}")
+
     with db:
-        tags = [item.tag_name for item in BlogTag.select()]
+        tags = [item.tag_name for item in (
+                BlogTag.select(BlogTag.tag_name).where(
+                    BlogTag.creator == current_user.user_name))]
+    cache.set(cache_key, tags)
+    return tags
+
+
+def render(params):
+    tags = get_user_tags()
     
     title, sel_tags, blog_content = '', [], ''
     blog_id = 0
@@ -99,6 +115,8 @@ def refresh_tags(tags):
         cur_tags = set(tags)
         new_tags = list(cur_tags - all_tags)
     log_info(new_tags)
+    if not new_tags:
+        return
 
     insert_tags = []
     for item in new_tags:
@@ -109,6 +127,11 @@ def refresh_tags(tags):
     with db:
         with db.atomic():
             BlogTag.insert_many(insert_tags).execute()
+
+    cache_key = "{}_tags".format(current_user.user_name)
+    log_info(f"clear tags cache, key: {cache_key}")
+    cache.clear(cache_key)
+    return
         
 
 @callback(

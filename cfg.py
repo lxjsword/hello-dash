@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 import contextvars
 from dotenv import load_dotenv
+from flask_caching import Cache
 
 
 load_dotenv(verbose=True)
@@ -24,3 +25,6 @@ APP_CFG = {
     'PERMANENT_SESSION_LIFETIME': timedelta(days=1),
     'DATA_PATH': os.path.join(APP_BASE, 'testdata' if ENV == 'dev' else 'data'),
 }
+
+cache = Cache(config={
+    'CACHE_TYPE': 'SimpleCache', 'CACHE_DEFAULT_TIMEOUT': 300})
