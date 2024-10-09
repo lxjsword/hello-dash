@@ -35,6 +35,7 @@ def main_layout():
                         [
                             fac.AntdContent(
                                 children=[
+                                    fac.Fragment(id='app_msg'),
                                     fac.AntdCenter(id='app-mount'),
                                 ],
                                 style={'backgroundColor': 'white'},

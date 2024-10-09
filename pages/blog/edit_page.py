@@ -59,7 +59,6 @@ def render(params):
 
     return fac.AntdSpace(
         [
-            fac.Fragment(id='blog_msg'),
             fac.AntdText(id='blog_id', children=blog_id, style={'display': 'none'}),
             fac.AntdButton("保存", type="primary", id="blog_save", disabled=disabled, style={'float': 'right'}),
             html.Div([
@@ -135,7 +134,7 @@ def refresh_tags(tags):
         
 
 @callback(
-    Output('blog_msg', 'children'),
+    Output('app_msg', 'children', allow_duplicate=True),
     Input('blog_save', 'nClicks'),
     State('blog_id', 'children'),
     State('blog_title', 'value'),
@@ -176,4 +175,4 @@ def save_md(n_clicks, blog_id, title, tags, content):
             blog.save()
     refresh_tags(tags)
 
-    return  fac.AntdMessage(content='保存成功', type='info')
+    return  fac.AntdMessage(content='保存成功', type='success')

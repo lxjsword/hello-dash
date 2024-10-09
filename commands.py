@@ -12,6 +12,7 @@ from flask.cli import AppGroup
 
 from db import db
 from models.user import User
+from models.blog import Blog, BlogTag
 from log import log_error, log_info
 
 
@@ -26,8 +27,8 @@ def initdb(drop):
     print('ok')
     with db:
         if drop:  # 判断是否输入了选项
-            db.drop_tables([User, ])
-        db.create_tables([User, ])
+            db.drop_tables([User, Blog, BlogTag, ])
+        db.create_tables([User, Blog, BlogTag, ])
     click.echo('Initialized database.')  # 输出提示信息
 
 

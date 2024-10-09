@@ -49,6 +49,7 @@ def render():
 # 登录回调函数
 @callback(
     Output('dcc-url', 'pathname', allow_duplicate=True),
+    Output('app_msg', 'children', allow_duplicate=True),
     Input('login-button', 'nClicks'),
     [State('username-input', 'value'), State('password-input', 'value')],
     prevent_initial_call=True
@@ -60,6 +61,6 @@ def login(n_clicks, username, password):
         user_data = User.get_or_none(user_name=username)
         if user_data and user_data.validate_password(password):
             login_user(user_data)
-            return "/wspace/"
+            return "/wspace/", fac.AntdMessage(content='登陆成功', type='success')
         else:
-            return no_update
+            return no_update, fac.AntdMessage(content='登陆失败', type='error')
