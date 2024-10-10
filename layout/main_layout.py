@@ -9,12 +9,13 @@
 """
 import traceback
 import dash # dash应用核心
-from dash import (html, dcc, callback, Input, Output, State) # dash自带的原生html组件库
+from dash import (html, dcc, callback, Input, Output, State, no_update) # dash自带的原生html组件库
 import feffery_antd_components as fac # fac通用组件库
 from log import log_info, log_error
 import json
 from flask_login import current_user, logout_user
 
+from cfg import KEY_PATH, PATH_MENU
 from layout.sider import sider
 from layout.header import header
 from pages import (home, system_info, page_404, login, )
@@ -27,6 +28,7 @@ def main_layout():
         [
             # 用于回调pathname信息
             dcc.Location(id='dcc-url', refresh=False),
+            dcc.Location(id='url-output', refresh=False),
             header(),
             fac.AntdLayout(
                 [
@@ -37,6 +39,11 @@ def main_layout():
                                 children=[
                                     fac.Fragment(id='app_msg'),
                                     fac.AntdCenter(id='app-mount'),
+                                    fac.AntdTabs(
+                                        id='main-tabs',
+                                        type='editable-card',
+                                        items=[]
+                                    ),
                                 ],
                                 style={'backgroundColor': 'white'},
                             ),
@@ -75,65 +82,104 @@ def parse_search_params(search):
 @callback(
     Output('user_name', 'children'),
     Output('app-mount', 'children'),
+    Output('main-tabs', 'items'),
+    Output('main-tabs', 'activeKey'),
     Input('dcc-url', 'pathname'),
-    Input('dcc-url', 'search')
+    Input('dcc-url', 'search'),
+    State('main-tabs', 'items'),
+    State('menu', 'currentItem'),
+    prevent_initial_call=True
 )
-def route(pathname, search):
+def route(pathname, search, tab_items, current_item):
+    
     user_name = ''
-    params = None
+    log_info(pathname)
+    log_info(search)
+    log_info(tab_items)
+    log_info(current_item)
+    if not current_item:
+        current_item = PATH_MENU.get(pathname, {})
+        if not current_item:
+            raise Exception('没有对应菜单项')
+    current_key = current_item['props']['key']
+
     if pathname not in ('/wspace/login', ):
         if not current_user.is_authenticated:
-            render_func = getattr(login, "render")
+            if tab_items:
+                tab_items.clear()
+            page = login.render()
+            return user_name, page, tab_items, None
         else:
             user_name = current_user.user_name
+            # 防止重复加入
+            for tab in tab_items:
+                if current_key == tab['key']:
+                    return user_name, None, tab_items, current_key
+                
             if pathname == '/wspace/':
-                render_func = getattr(home, "render")
+                page = home.render()
             elif pathname == '/wspace/system_info':
-                render_func = getattr(system_info, "render")
+                page = system_info.render()
             elif pathname == '/wspace/tools/json_tool':
-                render_func = getattr(json_tool, "render")
+                page = json_tool.render()
             elif pathname == '/wspace/tools/md_tool':
-                render_func = getattr(md_tool, "render")
+                page = md_tool.render()
             elif pathname == '/wspace/blog/edit_page':
-                render_func = getattr(edit_page, "render")
                 params = parse_search_params(search)
+                page = edit_page.render(params)
             elif pathname == '/wspace/blog/list_page':
-                render_func = getattr(list_page, "render")
+                page = list_page.render()
             else:
-                render_func = getattr(page_404, "render")
+                page = page_404.render()
+            
+            tab = {
+                'label': current_item['props']['title'],
+                'key': current_key,
+                'children': fac.AntdCenter(children=page),
+                'closable': True,
+            }
+            tab_items.append(tab)
+            return user_name, None, tab_items, current_key
     else:
         if pathname == '/wspace/login':
-            render_func = getattr(login, "render")
-
-    if params is not None:
-        return user_name, render_func(params)
-    else:
-        return user_name, render_func()
+            if tab_items:
+                tab_items.clear()
+            page = login.render()
+            return user_name, page, tab_items, None
 
 
 @callback(
-    Output('header-breadcrumb', 'items'),
-    [
-        Input('menu', 'currentItem'),
-        Input('menu', 'currentKeyPath'),
-        Input('menu', 'currentItemPath'),
-    ],
+    Output('url-output', 'pathname'),
+    Input('main-tabs', 'activeKey')
 )
-def menu_advanced_callback(currentItem, currentKeyPath, currentItemPath):
-    path_items = []
-    if not currentKeyPath or not currentItemPath:
-        return path_items
+def tab_active_callback(active_key):
+    log_info(active_key)
+    return KEY_PATH.get(active_key, '/wspace/')
+
+
+# @callback(
+#     Output('header-breadcrumb', 'items'),
+#     [
+#         Input('menu', 'currentItem'),
+#         Input('menu', 'currentKeyPath'),
+#         Input('menu', 'currentItemPath'),
+#     ],
+# )
+# def menu_advanced_callback(currentItem, currentKeyPath, currentItemPath):
+#     path_items = []
+#     if not currentKeyPath or not currentItemPath:
+#         return path_items
     
-    for item in currentItemPath:
-        props = item["props"]
-        aitem = {'title': props["title"], }
-        if 'href' in props:
-            aitem['href'] = props['href']
-        path_items.append(aitem)
+#     for item in currentItemPath:
+#         props = item["props"]
+#         aitem = {'title': props["title"], }
+#         if 'href' in props:
+#             aitem['href'] = props['href']
+#         path_items.append(aitem)
 
-    log_error(path_items)
+#     log_error(path_items)
 
-    return path_items
+#     return path_items
 
 
 @callback(

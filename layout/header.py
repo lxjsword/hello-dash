@@ -20,14 +20,14 @@ def header():
                     fac.AntdTitle(
                         'WSpace工作台', level=2
                     ), 
-                    fac.AntdBreadcrumb(
-                        id='header-breadcrumb',
-                        items=[],
-                        style={
-                            'marginLeft': '20px', 
-                            'marginBottom': '10px'
-                        }
-                    )
+                    # fac.AntdBreadcrumb(
+                    #     id='header-breadcrumb',
+                    #     items=[],
+                    #     style={
+                    #         'marginLeft': '20px', 
+                    #         'marginBottom': '10px'
+                    #     }
+                    # )
                     
                 ],
                 style={
