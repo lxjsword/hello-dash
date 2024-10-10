@@ -157,6 +157,23 @@ def tab_active_callback(active_key):
     return KEY_PATH.get(active_key, '/wspace/')
 
 
+@callback(
+    Output('main-tabs', 'items', allow_duplicate=True),
+    Output('main-tabs', 'activeKey', allow_duplicate=True),
+    Input('main-tabs', 'items'),
+    Input('main-tabs', 'activeKey'),
+    Input('main-tabs', 'latestDeletePane'),
+    prevent_initial_call='initial_duplicate'
+)
+def tag_delete_callback(origin_items, origin_key, delete_pane):
+    new_items = [item for item in origin_items if item['key'] != delete_pane]
+    if origin_key == delete_pane:
+        new_key = new_items[0]['key']
+    else:
+        new_key = origin_key
+    return new_items, new_key
+
+
 # @callback(
 #     Output('header-breadcrumb', 'items'),
 #     [
